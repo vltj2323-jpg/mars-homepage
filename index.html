@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MARS — Creator Management</title>
+<style>
+:root{--bg:#070707;--fg:#f4f4f2;--muted:#969696;--line:#222;--hot:#ff4b2e}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--fg);font-family:Arial,"Noto Sans KR",sans-serif}a{color:inherit;text-decoration:none}
+.wrap{max-width:1280px;margin:auto;padding:0 32px}
+header{position:absolute;top:0;left:0;right:0;z-index:10}.nav{height:92px;display:flex;align-items:center;justify-content:space-between}
+.wordmark{font-size:25px;font-weight:900;letter-spacing:.28em}.navlinks{display:flex;gap:34px;font-size:11px;letter-spacing:.12em;color:#bbb}.navlinks a:hover{color:#fff}
+.hero{min-height:100vh;position:relative;display:flex;align-items:flex-end;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero:after{content:"";position:absolute;width:62vw;height:62vw;max-width:850px;max-height:850px;border-radius:50%;right:-18%;top:5%;background:radial-gradient(circle at 35% 35%,#262626 0,#111 42%,#070707 70%);box-shadow:0 0 180px rgba(255,75,46,.10)}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,#070707 15%,transparent 65%),linear-gradient(0deg,#070707 0%,transparent 35%);z-index:1}
+.hero .wrap{position:relative;z-index:2;width:100%;padding-bottom:82px}.eyebrow{font-size:10px;letter-spacing:.3em;color:var(--hot);font-weight:700;margin-bottom:25px}
+h1{font-size:clamp(86px,15vw,190px);line-height:.78;letter-spacing:-.075em;margin:0;font-weight:900}.hero-copy{font-size:18px;line-height:1.65;color:#ccc;margin:34px 0 35px;max-width:530px}
+.actions{display:flex;gap:10px}.btn{display:inline-block;border:1px solid #3b3b3b;border-radius:99px;padding:14px 21px;font-size:11px;letter-spacing:.08em}.btn.primary{background:#f1f1ef;color:#090909;border-color:#f1f1ef}
+section{padding:115px 0;border-bottom:1px solid var(--line)}.kicker{font-size:10px;color:var(--hot);font-weight:800;letter-spacing:.25em}.title{font-size:clamp(48px,7vw,90px);line-height:.86;letter-spacing:-.065em;margin:12px 0 0}.intro{color:var(--muted);line-height:1.75;font-size:14px;max-width:470px}
+.head{display:flex;justify-content:space-between;align-items:end;gap:50px;margin-bottom:55px}
+.creators{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.creator{height:450px;background:#111;border:1px solid #242424;position:relative;overflow:hidden;display:flex;align-items:end;padding:25px}.creator:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#191919,#0a0a0a 60%,#1c0e0a)}.creator:nth-child(2):before{background:linear-gradient(145deg,#17151e,#0b0b0b 60%,#111a20)}.creator:nth-child(3):before{background:linear-gradient(145deg,#1b1710,#090909 60%,#24130f)}.creator:after{content:"M";position:absolute;right:-25px;top:-45px;font-size:270px;font-weight:900;color:rgba(255,255,255,.025)}.creator-info{position:relative;z-index:2}.creator-no{font-size:10px;color:#777;letter-spacing:.2em}.creator h3{font-size:32px;margin:7px 0}.creator p{font-size:10px;color:#999;letter-spacing:.12em}
+.services{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.service{min-height:190px;padding:27px 22px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.service b{font-size:12px;letter-spacing:.06em}.service p{font-size:12px;color:#777;line-height:1.7}
+.contact{display:flex;justify-content:space-between;align-items:end;gap:40px}.contact-title{font-size:clamp(70px,10vw,135px);line-height:.78;letter-spacing:-.08em;margin:15px 0 22px}.email{color:#bbb;font-size:15px}
+footer{padding:25px 0;color:#666;font-size:9px;letter-spacing:.12em;display:flex;justify-content:space-between}
+@media(max-width:800px){.navlinks{display:none}.wrap{padding:0 20px}.nav{height:76px}.hero .wrap{padding-bottom:65px}.hero:after{width:500px;height:500px;right:-250px;top:18%}.head{display:block}.head .intro{margin-top:28px}.creators{grid-template-columns:1fr}.creator{height:340px}.services{grid-template-columns:1fr 1fr}.contact{display:block}.contact .btn{margin-top:30px}}
+@media(max-width:480px){.services{grid-template-columns:1fr}h1{font-size:82px}.hero-copy{font-size:15px}.actions{flex-direction:column;align-items:flex-start}.btn{padding:13px 18px}}
+</style>
+
+<style>
+/* V3 additions */
+.creator{cursor:pointer;transition:transform .25s ease,border-color .25s ease}.creator:hover{transform:translateY(-5px);border-color:#555}
+.creator-link{display:inline-block;margin-top:12px;font-size:10px;letter-spacing:.12em;color:#ddd;border-bottom:1px solid #555;padding-bottom:5px}
+.form-wrap{max-width:760px;margin-top:55px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:8px}.field.full{grid-column:1/-1}.field label{font-size:10px;color:#888;letter-spacing:.12em}.field input,.field select,.field textarea{width:100%;background:#0d0d0d;border:1px solid #292929;color:#eee;padding:15px 14px;font:inherit;outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:#777}.field textarea{min-height:130px;resize:vertical}.submit{margin-top:12px;cursor:pointer}
+.notice{font-size:10px;color:#666;line-height:1.6;margin-top:14px}
+.badge{display:inline-block;border:1px solid #333;padding:6px 9px;border-radius:99px;font-size:9px;color:#999;margin-right:5px}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+</style>
+
+
+<style>
+.noticebar{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(130px);z-index:30;background:#f1f1ef;color:#090909;padding:13px 18px;border-radius:999px;font-size:11px;box-shadow:0 10px 40px rgba(0,0,0,.4);transition:.35s;white-space:nowrap}.noticebar.show{transform:translateX(-50%) translateY(0)}
+.mobile-cta{display:none}
+@media(max-width:800px){.mobile-cta{display:block;position:fixed;bottom:14px;left:14px;right:14px;z-index:20;text-align:center;background:#f1f1ef;color:#090909;border-radius:99px;padding:14px;font-size:11px;font-weight:700;box-shadow:0 8px 30px rgba(0,0,0,.35)}}
+</style>
+
+<style>
+/* MARS V5 — production presentation */
+.statline{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #222;border-bottom:1px solid #222;margin-top:70px}
+.stat{padding:24px 18px;border-right:1px solid #222}.stat:last-child{border-right:0}.stat strong{display:block;font-size:30px;letter-spacing:-.05em}.stat span{display:block;color:#777;font-size:10px;letter-spacing:.12em;margin-top:7px}
+.process{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #222;border-left:1px solid #222}.step{padding:28px 20px;min-height:210px;border-right:1px solid #222;border-bottom:1px solid #222}.step .n{font-size:10px;color:#ff4b2e;letter-spacing:.2em}.step h3{font-size:22px;margin:35px 0 10px}.step p{color:#777;font-size:12px;line-height:1.7}
+.faq{max-width:900px}.faq details{border-top:1px solid #222;padding:22px 0}.faq details:last-child{border-bottom:1px solid #222}.faq summary{cursor:pointer;list-style:none;font-size:14px;font-weight:700}.faq summary::-webkit-details-marker{display:none}.faq p{color:#777;line-height:1.7;font-size:12px;max-width:760px}
+.legal{display:flex;gap:18px;margin-top:28px;font-size:9px;color:#666}.legal a:hover{color:#aaa}
+@media(max-width:800px){.statline{grid-template-columns:1fr}.stat{border-right:0;border-bottom:1px solid #222}.stat:last-child{border-bottom:0}.process{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.process{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><nav class="nav">
+<a class="wordmark" href="#">MARS</a>
+<div class="navlinks"><a href="#creators">CREATORS</a><a href="#business">BUSINESS</a><a href="#process">PROCESS</a><a href="#about">ABOUT</a><a href="#contact">CONTACT</a></div>
+</nav></div></header>
+
+<main>
+<section class="hero"><div class="wrap">
+<div class="eyebrow">CREATOR MANAGEMENT / MEDIA</div>
+<h1>MARS<br>CREATES.</h1>
+<p class="hero-copy">크리에이터의 개성을 브랜드로.<br>사람과 콘텐츠의 가능성을 더 멀리 연결합니다.</p>
+<div class="actions"><a class="btn primary" href="#creators">CREATORS ↗</a><a class="btn" href="#contact">WORK WITH MARS</a></div>
+</div></section>
+
+<section id="creators"><div class="wrap">
+<div class="head"><div><div class="kicker">01 / CREATORS</div><h2 class="title">PEOPLE<br>WHO MOVE.</h2></div><p class="intro">MARS와 함께 성장하는 크리에이터를 소개합니다. 실제 소속 크리에이터가 정해지면 이름, 사진, 채널 링크를 이 영역에 바로 연결할 수 있습니다.</p></div>
+<div class="creators">
+<article class="creator"><div class="creator-info"><span class="creator-no">MARS 001</span><h3>CREATOR A</h3><span class="badge">YOUTUBE</span><span class="badge">LIVE</span><p>ENTERTAINMENT · TALK</p><a class="creator-link" href="#" onclick="return false">PROFILE ↗</a></div></article>
+<article class="creator"><div class="creator-info"><span class="creator-no">MARS 002</span><h3>CREATOR B</h3><span class="badge">STREAMING</span><span class="badge">GAMING</span><p>LIVE · CONTENT</p><a class="creator-link" href="#" onclick="return false">PROFILE ↗</a></div></article>
+<article class="creator"><div class="creator-info"><span class="creator-no">MARS 003</span><h3>CREATOR C</h3><span class="badge">SHORTS</span><span class="badge">SNS</span><p>LIFESTYLE · MEDIA</p><a class="creator-link" href="#" onclick="return false">PROFILE ↗</a></div></article>
+</div>
+</div></section>
+
+<section id="business"><div class="wrap">
+<div class="head"><div><div class="kicker">02 / BUSINESS</div><h2 class="title">WE BUILD<br>THE NEXT.</h2></div><p class="intro">개인방송 매니지먼트를 중심으로 광고, 브랜디드 콘텐츠, 채널 성장과 IP 확장을 함께 설계합니다.</p></div>
+<div class="services">
+<div class="service"><b>01 — MANAGEMENT</b><p>방송 일정, 콘텐츠 운영, 커뮤니케이션 및 크리에이터 매니지먼트.</p></div>
+<div class="service"><b>02 — BRAND</b><p>광고주 매칭, 캠페인, 협찬 및 브랜디드 콘텐츠 기획.</p></div>
+<div class="service"><b>03 — CONTENT</b><p>유튜브·숏폼·라이브 플랫폼에 맞춘 콘텐츠 제작과 기획.</p></div>
+<div class="service"><b>04 — GROWTH</b><p>채널 데이터와 트렌드를 바탕으로 한 성장 및 IP 전략.</p></div>
+</div>
+</div>
+<div class="statline">
+  <div class="stat"><strong>CREATOR FIRST</strong><span>MANAGEMENT PHILOSOPHY</span></div>
+  <div class="stat"><strong>BRAND READY</strong><span>PARTNERSHIP OPERATIONS</span></div>
+  <div class="stat"><strong>LONG TERM</strong><span>CAREER & IP DEVELOPMENT</span></div>
+</div>
+</div></section>
+
+<section id="process"><div class="wrap">
+<div class="head"><div><div class="kicker">03 / HOW WE WORK</div><h2 class="title">FROM<br>IDEA TO IMPACT.</h2></div><p class="intro">크리에이터의 활동을 존중하면서 매니지먼트, 협업, 콘텐츠, 성장의 과정을 하나의 흐름으로 연결합니다.</p></div>
+<div class="process">
+<div class="step"><span class="n">01 / DISCOVER</span><h3>발견</h3><p>채널의 콘텐츠와 방향을 이해하고 서로의 목표를 확인합니다.</p></div>
+<div class="step"><span class="n">02 / PLAN</span><h3>설계</h3><p>콘텐츠, 브랜드 협업, 활동 방향에 맞춘 실행 계획을 세웁니다.</p></div>
+<div class="step"><span class="n">03 / EXECUTE</span><h3>실행</h3><p>일정·커뮤니케이션·캠페인 운영을 지원해 창작에 집중할 수 있게 합니다.</p></div>
+<div class="step"><span class="n">04 / GROW</span><h3>성장</h3><p>성과를 돌아보고 새로운 콘텐츠와 비즈니스 기회를 확장합니다.</p></div>
+</div></div></section>
+
+<section id="about"><div class="wrap">
+<div class="kicker">03 / ABOUT MARS</div><h2 class="title">NOT JUST<br>A MANAGEMENT.</h2>
+<p class="intro" style="margin-top:32px;max-width:650px;font-size:16px">MARS는 단순히 크리에이터를 관리하는 회사가 아니라, 크리에이터가 자신의 색을 잃지 않으면서 더 오래 활동하고 더 많은 기회를 만들 수 있도록 함께 움직이는 매니지먼트입니다.</p>
+
+</div></section>
+
+<section id="faq"><div class="wrap">
+<div class="head"><div><div class="kicker">05 / FAQ</div><h2 class="title">QUESTIONS<br>ANSWERED.</h2></div><p class="intro">MARS와의 협업을 시작하기 전에 자주 확인하는 내용을 정리했습니다.</p></div>
+<div class="faq">
+<details><summary>어떤 크리에이터와 함께하나요?</summary><p>유튜브, 개인방송, 숏폼 등 디지털 콘텐츠를 기반으로 활동하는 크리에이터를 대상으로 합니다. 실제 계약 여부와 조건은 개별 협의를 통해 결정됩니다.</p></details>
+<details><summary>브랜드도 협업을 문의할 수 있나요?</summary><p>네. 브랜드 캠페인, 광고, 브랜디드 콘텐츠, 크리에이터 섭외 등의 문의를 받을 수 있도록 구성했습니다.</p></details>
+<details><summary>소속 크리에이터가 없어도 지원할 수 있나요?</summary><p>지원 가능 여부는 채널과 활동 방향을 확인한 후 개별적으로 안내하는 방식으로 운영할 수 있습니다.</p></details>
+<details><summary>문의 후에는 어떻게 진행되나요?</summary><p>문의 내용을 확인한 뒤 필요한 경우 추가 자료를 요청하고, 협업 가능성과 다음 단계를 안내하는 방식으로 운영할 수 있습니다.</p></details>
+</div></div></section>
+
+<section id="contact"><div class="wrap contact"><div>
+<div class="kicker">04 / CONTACT</div><h2 class="contact-title">LET'S<br>TALK.</h2><div class="email">vltj2323@naver.com</div>
+</div><a class="btn primary" href="mailto:vltj2323@naver.com">CONTACT MARS ↗</a></div>
+<div class="form-wrap">
+  <div class="kicker">INQUIRY FORM</div>
+  <form id="inquiryForm" class="form-grid">
+    <div class="field"><label>NAME</label><input required name="name" placeholder="이름"></div>
+    <div class="field"><label>CONTACT</label><input required name="contact" placeholder="전화번호 또는 이메일"></div>
+    <div class="field"><label>TYPE</label>
+      <select name="type"><option>크리에이터 지원</option><option>광고·브랜드 협업</option><option>섭외·출연</option><option>기타 제휴</option></select>
+    </div>
+    <div class="field"><label>SNS / CHANNEL</label><input name="channel" placeholder="유튜브 / 인스타 / SOOP 등"></div>
+    <div class="field full"><label>MESSAGE</label><textarea name="message" placeholder="문의 내용을 입력해주세요."></textarea></div>
+    <div class="field full"><button class="btn primary submit" type="submit">SEND INQUIRY ↗</button></div>
+  </form>
+  <p class="notice">현재 폼은 화면용 프론트엔드입니다. 실제 접수는 이메일/폼 서비스 또는 자체 서버를 연결하면 바로 운영할 수 있습니다.</p>
+</div>
+</section>
+</main>
+<footer class="wrap"><div><span>© 2026 MARS. ALL RIGHTS RESERVED.</span><div class="legal"><a href="#contact">PRIVACY</a><a href="#contact">TERMS</a><span>CONTACT: vltj2323@naver.com</span></div></div><span>CREATOR MANAGEMENT / MEDIA</span></footer>
+
+<script>
+document.getElementById('inquiryForm')?.addEventListener('submit', function(e){
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(this).entries());
+  const subject = encodeURIComponent('[MARS 문의] ' + data.type + ' / ' + data.name);
+  const body = encodeURIComponent(
+    '이름: '+data.name+'\n연락처: '+data.contact+'\n문의유형: '+data.type+
+    '\nSNS/채널: '+data.channel+'\n\n문의내용:\n'+data.message
+  );
+  window.location.href = 'mailto:vltj2323@naver.com?subject='+subject+'&body='+body;
+});
+</script>
+
+
+<div id="toast" class="noticebar">문의 메일 작성 화면으로 이동합니다.</div>
+<a class="mobile-cta" href="#contact">MARS CONTACT ↗</a>
+<script>
+document.querySelectorAll('a[href^="mailto:"]').forEach(a=>{
+  a.addEventListener('click',()=>{document.getElementById('toast')?.classList.add('show');
+    setTimeout(()=>document.getElementById('toast')?.classList.remove('show'),2600);
+  });
+});
+</script>
+
+<script>
+const form=document.getElementById('inquiryForm');
+if(form){
+ form.addEventListener('submit',function(e){
+   const name=form.querySelector('[name="name"]').value.trim();
+   const contact=form.querySelector('[name="contact"]').value.trim();
+   if(!name || !contact){e.preventDefault();alert('이름과 연락처를 입력해주세요.');return;}
+ });
+}
+</script>
+</body>
+</html>
